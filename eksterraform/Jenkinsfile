@@ -10,7 +10,7 @@ pipeline {
   stages {
     stage('checkout') {
         steps {
-            git 'https://github.com/Naresh240/eksterraform.git'
+            git 'https://github.com/VamsiTechTuts/awsautomationrepo.git'
         }
     }
 	stage('Setup') {
@@ -36,16 +36,18 @@ pipeline {
 		}	
 		steps {
 			script {
-			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS_Credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-			sh """
-				terraform init
-				terraform workspace new ${params.cluster} || true
-				terraform workspace select ${params.cluster}
-				terraform plan \
-					-var cluster-name=${params.cluster} \
-					-out ${plan}
-				echo ${params.cluster}
-			"""
+			dir('eksterraform') {
+				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS_Credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+				sh """
+					terraform init
+					terraform workspace new ${params.cluster} || true
+					terraform workspace select ${params.cluster}
+					terraform plan \
+						-var cluster-name=${params.cluster} \
+						-out ${plan}
+					echo ${params.cluster}
+				"""
+				}
 			}
         }
       }
@@ -56,19 +58,21 @@ pipeline {
 		}	
 		steps {
 			script {
-			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS_Credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            if (fileExists('$HOME/.kube')) {
-			    echo '.kube Directory Exists'
-            } else {
-			   sh 'mkdir -p $HOME/.kube'
-			}
-			sh """
-				terraform apply -input=false -auto-approve ${plan}
-				terraform output kubeconfig > $HOME/.kube/config
-			"""
-			sh 'sudo chown $(id -u):$(id -g) $HOME/.kube/config'
-			sleep 30
-			sh 'kubectl get nodes'
+			dir('eksterraform') {
+				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS_Credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+				if (fileExists('$HOME/.kube')) {
+					echo '.kube Directory Exists'
+				} else {
+				sh 'mkdir -p $HOME/.kube'
+				}
+				sh """
+					terraform apply -input=false -auto-approve ${plan}
+					terraform output kubeconfig > $HOME/.kube/config
+				"""
+				sh 'sudo chown $(id -u):$(id -g) $HOME/.kube/config'
+				sleep 30
+				sh 'kubectl get nodes'
+				}
 			}
         }
       }
@@ -79,11 +83,13 @@ pipeline {
       }
       steps {
         script {
-			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS_Credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-			sh """
-              terraform workspace select ${params.cluster}
-              terraform destroy -auto-approve
-            """
+			dir('eksterraform') {
+				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS_Credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+				sh """
+				terraform workspace select ${params.cluster}
+				terraform destroy -auto-approve
+				"""
+				}
 			}
         }
       }
