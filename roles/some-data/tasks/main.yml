@@ -1,0 +1,59 @@
+---
+
+# download some data to check metrics in kibana
+- name: Download data
+  get_url:
+    url: https://s3.amazonaws.com/logzio-elk/apache-daily-access.log
+    dest: /home/ubuntu
+    mode: '0440'
+
+# File exit remove file
+#
+- name: check if file exists
+  stat: 
+    path: /etc/logstash/conf.d/apache-01.conf
+  register: files_to_delete
+
+- name: removing file if exits
+  file:
+    path: /etc/logstash/conf.d/apache-01.conf
+    state: absent
+  when: files_to_delete.stat.exists == True
+
+- name: Create new file for processing apache2 access log files
+  file:
+    path: /etc/logstash/conf.d/apache-01.conf
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+
+# Insert data into apache2 access log file
+- name: Insert data into access log file
+  blockinfile:
+    path: /etc/logstash/conf.d/apache-01.conf
+    block: |
+      input {
+        file {
+          path => "/home/ubuntu/apache-daily-access.log"
+          start_position => "beginning"
+                  sincedb_path => "/dev/null"
+        }
+      }
+
+      filter {
+        grok {
+            match => { "message" => "%{COMBINEDAPACHELOG}" }
+        }
+        date {
+          match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+        }
+      }
+
+      output {
+        elasticsearch {
+          hosts => ["localhost:9200"]
+        }
+      }
+            

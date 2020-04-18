@@ -1,0 +1,18 @@
+---
+#
+# Installing apache2
+
+# Install apache2
+
+- name: Install apache2 with apt
+  apt:
+   name: apache2
+   update_cache: yes
+ 
+   
+# Starting apache2
+
+- name: Starting apache2
+  service:
+   name: apache2
+   state: started
