@@ -1,0 +1,31 @@
+- name: create systemd unit file for the Zookeeper
+  file:
+    path: /etc/systemd/system/kafka.service
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+- name: Insert content into kafka.service file
+  blockinfile:
+    path: /etc/systemd/system/kafka.service
+    block: |
+      [Unit]
+      Description=Apache Kafka Server
+      Documentation=http://kafka.apache.org/documentation.html
+      Requires=zookeeper.service
+      
+      [Service]
+      Type=simple
+      Environment="JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64"
+      ExecStart=/usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties
+      ExecStop=/usr/local/kafka/bin/kafka-server-stop.sh
+        
+      [Install]
+      WantedBy=multi-user.target
+- name: just force systemd to reread configs
+  systemd: daemon_reload=yes
+- name: kafka package starting
+  service:
+    name: kafka
+    state: started
+

@@ -1,0 +1,15 @@
+---
+##
+- name: Download kafka package
+  get_url:
+    url: http://www-us.apache.org/dist/kafka/2.4.0/kafka_2.13-2.4.0.tgz
+    dest: /opt
+    mode: '0440'
+- name: Extract kafka package
+  unarchive:
+    src: /opt/kafka_2.13-2.4.0.tgz
+    dest: /usr/local/
+    remote_src: true
+- name: Rename file kafka_2.13-2.4.0 as kafka
+  command: mv /usr/local/kafka_2.13-2.4.0 /usr/local/kafka
+

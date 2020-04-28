@@ -1,0 +1,34 @@
+---
+#
+#
+- name: create systemd unit file for the Zookeeper
+  file:
+    path: /etc/systemd/system/zookeeper.service
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+- name: Insert content into zookeeper.service file
+  blockinfile:
+    path: /etc/systemd/system/zookeeper.service
+    block: |
+      [Unit]
+      Description=Apache Zookeeper server
+      Documentation=http://zookeeper.apache.org
+      Requires=network.target remote-fs.target
+      After=network.target remote-fs.target
+      
+      [Service]
+      Type=simple
+      ExecStart=/usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties
+      ExecStop=/usr/local/kafka/bin/zookeeper-server-stop.sh
+      Restart=on-abnormal
+      
+      [Install]
+      WantedBy=multi-user.target
+- name: just force systemd to reread configs
+  systemd: daemon_reload=yes
+- name: Zookeeper package starting
+  service:
+    name: zookeeper
+    state: started

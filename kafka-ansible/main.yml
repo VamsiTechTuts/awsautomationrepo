@@ -1,0 +1,13 @@
+---
+#
+# Playbook to install Kafka
+#
+- hosts: localhost
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  roles:
+  - { role: java }
+  - { role: downloadkafka }
+  - { role: zookeeper }
+  - { role: kafka }
