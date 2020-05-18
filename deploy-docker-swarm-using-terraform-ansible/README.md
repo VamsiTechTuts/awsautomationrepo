@@ -49,7 +49,30 @@ Keep Access_key and Secret_Access_key values with in the main.tf file
 We will get outputs as shown below
 -------
 
+Create ansible user and set password
+------
+    adduser ansible
+    
+Enable sudo permissions for ansible user:
+-----
+    vi /etc/sudoers
+Enable PasswordAuthentication:
+------
+    vi /etc/ssh/sshd_config
+    PasswordAuthentication yes
+    
+Restart sshd service:
+----
+    service sshd restart
+    
+Add below line and save file
+    
+    ansible ALL=(ALL:ALL)   NOPASSWD: ALL
 
-Keep these IP's with in this Path:     
+Keep these IP's with in this Path: 
+----
+    vi /etc/ansible/hosts
+
+
 
 
