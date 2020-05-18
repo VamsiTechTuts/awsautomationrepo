@@ -15,8 +15,7 @@ sudo echo -e "ansible ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 
 sudo sed -i '/PasswordAuthentication no/c\PasswordAuthentication yes' /etc/ssh/sshd_config
 sudo service sshd restart
-sudo mkdir /home/ansible
-sudo mkdir /home/ansible/.ssh
+sudo mkdir -p /home/ansible/.ssh
 sudo touch /home/ansible/.ssh/authorized_keys
 sudo chown -R ansible:ansible /home/ansible
 
