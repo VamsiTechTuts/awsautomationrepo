@@ -1,0 +1,7 @@
+[masters]
+52.203.108.98 
+
+[workers]
+#ansible_user=ubuntu
+54.172.162.204
+184.72.69.46 
