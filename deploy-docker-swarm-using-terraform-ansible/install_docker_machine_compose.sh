@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 export LC_ALL=C
 sudo apt-get update -y
 #sudo apt-get upgrade -y
