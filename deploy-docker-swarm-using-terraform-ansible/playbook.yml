@@ -3,7 +3,7 @@
     hosts: masters
     become: true
     gather_facts: False
-    remote_user: ubuntu
+    remote_user: ansible
     tasks:
       - name: Swarm Init
         command: sudo usermod -aG docker {{remote_user}}
@@ -26,7 +26,7 @@
   - name: Join Swarm Cluster
     hosts: workers
     become: true
-    remote_user: ubuntu
+    remote_user: ansible
     gather_facts: False
     vars:
       token: "{{ hostvars[groups['masters'][0]]['worker_token']['stdout'] }}"
