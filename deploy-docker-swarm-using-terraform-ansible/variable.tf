@@ -13,14 +13,10 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
-variable "key_path" {
-  description = "SSH Public Key path"
-  default = "/root/May.pem"
-}
 
 variable "key_name" {
   description = "Desired name of Keypair..."
-  default = "May"
+  default = "may"
 }
 
 variable "bootstrap_path" {
