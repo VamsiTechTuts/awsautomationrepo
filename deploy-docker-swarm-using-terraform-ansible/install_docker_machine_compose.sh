@@ -8,6 +8,11 @@ sudo apt-get update -y
 ### install python-minimal
 sudo apt-get install python-minimal -y
 
+sudo echo -e "ansible ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+
+sudo sed -i '/PasswordAuthentication no/c\PasswordAuthentication yes' /etc/ssh/sshd_config
+sudo service sshd restart
+
 # install docker-engine
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
