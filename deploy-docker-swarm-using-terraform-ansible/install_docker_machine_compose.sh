@@ -8,6 +8,9 @@ sudo apt-get update -y
 ### install python-minimal
 sudo apt-get install python-minimal -y
 
+export PASS=ansible
+useradd -p $(openssl passwd -1 $PASS) ansible
+
 sudo echo -e "ansible ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 
 sudo sed -i '/PasswordAuthentication no/c\PasswordAuthentication yes' /etc/ssh/sshd_config
