@@ -32,6 +32,7 @@ resource "aws_db_instance" "mariadb" {
   backup_retention_period = 30 # how long you’re going to keep your backups
   availability_zone = aws_subnet.main-private-1.availability_zone
   skip_final_snapshot    = true
+  
   tags = {
     Name = "mariadb-instance"
   }
