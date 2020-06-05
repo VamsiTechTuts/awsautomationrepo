@@ -1,21 +1,39 @@
-# Ansible ELK Playbook
- 
-This playbook is for setting up version 5.x of the ELK Stack on a remote server. 
+# Create S3 Bucket
 
-## Notes and requirements
+Step1:
+-------
+First we need to keep AWS access key and secret access key with in credentials file
 
- - The playbook was built and tested on Ubuntu 16.04 VMs, for ELK versions 5.x 
- - You will need Ansible installed and running
- - Playbook is currently configured to set up the ELK stack together with Metricbeat for server perf monitoring. There is a role for Filebeat as well. You just need to add the Filebeat role to your [site.yml] file.
- 
- ## Instructions
- 
- 1. Edit your Ansible hosts file ('/etc/ansible/hosts') and add an 'elkservers' entry for the server you wish to install ELK on. You can of course name the host any way you want, this is just an example. 
- 2. Verify connectivity to the ELK server.
- 3. In the terminal on the machine hosting Ansible, clone this repo.
- 4. Cd into the directory, and run:
- `ansible-playbook site.yml`
- 
- The plays in the playbook will run on the target server, installing ELK and the specified beats shippers. 
- 
-[site.yml]: https://github.com/DanielBerman/ansible-elk-playbook/blob/master/site.yml
+    vi /root/.aws/credentials
+    ------------------------------------------
+    [default]
+    aws_access_key_id = 
+    aws_secret_access_key = 
+    ------------------------------------------
+Step2:
+------
+Clone code from source code management
+
+    git clone https://github.com/VamsiTechTuts/awsautomationrepo.git
+    cd terraform_s3_bucket
+Step3:
+------
+Now run terraform init command. This command will download and install the proper version of the AWS provider for your project and add it in the directory .terraform
+
+    terraform init
+Step4:
+------
+Now run terraform plan to make sure configuration is ready to be applied
+
+    terraform plan
+Step5:
+------
+Let’s run terraform apply. This command shows you what are the changes which are going to be applied to your infrastructure and it will prompt for your confirmation. Enter ‘yes’ when it prompts you for the confirmation.
+
+    terraform apply
+
+CleanUP:
+--------
+If you want to remove s3 bucket just give below command
+
+    terraform destroy   
