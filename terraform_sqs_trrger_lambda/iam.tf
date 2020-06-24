@@ -16,12 +16,12 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "example_lambda" {
-  policy_arn = "${aws_iam_policy.example_lambda.arn}"
-  role = "${aws_iam_role.example_lambda.name}"
+  policy_arn = aws_iam_policy.example_lambda.arn
+  role = aws_iam_role.example_lambda.name
 }
 
 resource "aws_iam_policy" "example_lambda" {
-  policy = "${data.aws_iam_policy_document.example_lambda.json}"
+  policy = data.aws_iam_policy_document.example_lambda.json
 }
 
 data "aws_iam_policy_document" "example_lambda" {
