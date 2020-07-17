@@ -4,12 +4,10 @@ resource "aws_autoscaling_group" "agents" {
     max_size = "4"
     min_size = "2"
     health_check_grace_period = 300
-    health_check_type = "ELB"
+    health_check_type = "EC2"
     desired_capacity = 2
     force_delete = true
     launch_configuration = aws_launch_configuration.agent-lc.name
-    enabled_metrics = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupTotalInstances"]
-    metrics_granularity="1Minute"
     load_balancers= ["${aws_elb.elb1.id}"]
 
     tag {
