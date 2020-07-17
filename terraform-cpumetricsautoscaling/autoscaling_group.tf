@@ -8,7 +8,6 @@ resource "aws_autoscaling_group" "agents" {
     desired_capacity = 2
     force_delete = true
     launch_configuration = aws_launch_configuration.agent-lc.name
-    load_balancers= ["${aws_elb.elb1.id}"]
 
     tag {
         key = "Name"
