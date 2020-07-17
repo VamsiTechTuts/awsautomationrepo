@@ -5,7 +5,8 @@ resource "aws_elb" "elb1" {
   connection_draining = true
   connection_draining_timeout = 400
   security_groups = ["${aws_security_group.websg.id}"]
-  availability_zones = ["us-east-1a","us-east-1b"]
+  availability_zones = aws_instance.webservers[*].availability_zone
+  instances = aws_instance.webservers.*.id
 
   listener {
     instance_port     = 80

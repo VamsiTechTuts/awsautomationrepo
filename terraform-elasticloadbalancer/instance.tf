@@ -1,10 +1,10 @@
 resource "aws_instance" "webservers" {
-    name_prefix = "agent-lc-"
-    image_id = var.ami
+    ami		= var.ami
     instance_type = var.instance_type
-    key_name = var.key_name
-    security_groups = ["${aws_security_group.websg.id}"]
-    user_data = file("install_httpd.sh")
+    count         = var.instance_count
+    key_name	= var.key_name
+    security_groups = ["${aws_security_group.websg.name}"]
+    user_data	= file("install_httpd.sh")
     
     lifecycle {
         create_before_destroy = true
@@ -13,5 +13,9 @@ resource "aws_instance" "webservers" {
     root_block_device {
         volume_type = "gp2"
         volume_size = "8"
+    }
+
+    tags = {
+      Name = "elb-servers"
     }
 }
