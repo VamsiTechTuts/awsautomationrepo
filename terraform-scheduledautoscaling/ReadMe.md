@@ -1,5 +1,9 @@
 # Schedule Autoscaling using Terraform
 
+Pre-Requisites:
+----------
+    -   Install terraform(v0.12)
+    -   Install Git
 Clone the code from github
 ----------
     https://github.com/VamsiTechTuts/awsautomationrepo.git
